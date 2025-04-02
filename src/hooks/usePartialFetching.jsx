@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { getSortedByArticles } from "../api";
 
-export const useContentCardFetching = () => {
-  const [sortedArticles, setSortedArticles] = useState([]);
+export const usePartialFetching = (apiFunction, ...args) => {
+  const [data, setData] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,20 +15,13 @@ export const useContentCardFetching = () => {
       setIsButtonLoading(true);
     }
     setError(false);
-
-    getSortedByArticles("votes", currentPage, 4)
-      .then((articlesByVotes) => {
-        if ((articlesByVotes.length > 0) & (articlesByVotes[0].votes < 10)) {
-          return getSortedByArticles("comment_count", currentPage, 4);
-        }
-
-        return articlesByVotes;
-      })
-      .then((articlesToAdd) => {
+    const paramsArgs = [...args, currentPage];
+    apiFunction(...paramsArgs)
+      .then((dataToAdd) => {
         if (isMounted) {
-          setSortedArticles((prev) => [...prev, ...articlesToAdd]);
+          setData((prev) => [...prev, ...dataToAdd]);
         } else {
-          setSortedArticles(articlesToAdd);
+          setData(dataToAdd);
         }
       })
       .catch((err) => {
@@ -51,7 +43,7 @@ export const useContentCardFetching = () => {
   }
 
   return {
-    sortedArticles,
+    data,
     isPageLoading,
     isButtonLoading,
     error,

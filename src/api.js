@@ -30,3 +30,15 @@ export const getArticleById = (article_id) => {
     return data.article;
   });
 };
+
+export const getAllCommentsByArticleId = (article_id, page) => {
+  return ncNews
+    .get(`/articles/${article_id}/comments`, {
+      params: {
+        p: page,
+      },
+    })
+    .then(({ data }) => {
+      return data.comments;
+    });
+};
