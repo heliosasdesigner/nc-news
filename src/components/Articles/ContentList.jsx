@@ -10,15 +10,8 @@ function ContentList({ listData, isLoading, listError }) {
     <>
       <h4>Articles you might interested</h4>
       {listData?.map((article) => {
-        const {
-          article_id,
-
-          comment_count,
-          created_at,
-          title,
-          topic,
-          votes,
-        } = article;
+        const { article_id, comment_count, created_at, title, topic, votes } =
+          article;
 
         return (
           <div key={article_id}>
