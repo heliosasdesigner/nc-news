@@ -1,25 +1,15 @@
 import React from "react";
-import { useApiRequest } from "../../hooks/useApiRequest";
-import { getSortedByArticles } from "../../api";
+
 import ListItem from "./ListItem";
 
-function ContentList() {
-  const { data, isLoading, error } = useApiRequest(
-    getSortedByArticles,
-    "created_at",
-    1,
-    12
-  );
-
-  console.log(data);
-
+function ContentList({ listData, isLoading, listError }) {
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Oops...</div>;
+  if (listError) return <div>Oops...</div>;
 
   return (
     <>
       <h4>Articles you might interested</h4>
-      {data?.map((article) => {
+      {listData?.map((article) => {
         const {
           article_id,
 
@@ -33,6 +23,7 @@ function ContentList() {
         return (
           <div key={article_id}>
             <ListItem
+              article_id={article_id}
               title={title}
               topic={topic}
               created_at={created_at}
