@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useApiRequest } from "../../hooks/useApiRequest";
-import { getArticleById } from "../../api";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { getArticleById } from "../api";
 
 function Article({ sortedArticles, listData }) {
   const navigate = useNavigate();

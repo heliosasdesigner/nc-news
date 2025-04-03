@@ -2,9 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import { useContentCardFetching } from "../hooks/useContentCardFetching";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { getSortedByArticles } from "../api";
-import ContentCard from "./articles/ContentCard";
-import ContentList from "./articles/ContentList";
-import Article from "./Articles/Article";
+import ContentCard from "./ContentCard";
+import ContentList from "./ContentList";
+import Article from "./Article";
 
 function Container() {
   //Card
