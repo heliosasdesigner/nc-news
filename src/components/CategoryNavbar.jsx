@@ -1,5 +1,5 @@
-import { getAllTopics } from "../../api";
-import { useApiRequest } from "../../hooks/useApiRequest";
+import { getAllTopics } from "../api";
+import { useApiRequest } from "../hooks/useApiRequest";
 
 function CategoryNavbar() {
   const { data, isLoading } = useApiRequest(getAllTopics);

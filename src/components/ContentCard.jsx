@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getSortedByArticles } from "../../api";
+import { getSortedByArticles } from "../api";
 import CardItem from "./CardItem";
 
 function ContentCard() {

@@ -1,5 +1,5 @@
-import ContentCard from "./articles/ContentCard";
-import ContentList from "./articles/ContentList";
+import ContentCard from "./ContentCard";
+import ContentList from "./ContentList";
 
 function Container() {
   return (

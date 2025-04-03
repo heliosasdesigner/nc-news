@@ -1,7 +1,7 @@
 import React from "react";
-import CategoryNavbar from "./Header/CategoryNavbar";
-import ThemeToggle from "./header/ThemeToggle";
-import UserProfile from "./Header/UserProfile";
+import CategoryNavbar from "./CategoryNavbar";
+import ThemeToggle from "./ThemeToggle";
+import UserProfile from "./UserProfile";
 
 function Header() {
   return (

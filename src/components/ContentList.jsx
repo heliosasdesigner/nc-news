@@ -1,6 +1,6 @@
 import React from "react";
-import { useApiRequest } from "../../hooks/useApiRequest";
-import { getSortedByArticles } from "../../api";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { getSortedByArticles } from "../api";
 import ListItem from "./ListItem";
 
 function ContentList() {
@@ -10,8 +10,6 @@ function ContentList() {
     1,
     12
   );
-
-  console.log(data);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Oops...</div>;
