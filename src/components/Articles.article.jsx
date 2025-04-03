@@ -1,8 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useApiRequest } from "../../hooks/useApiRequest";
-import { getAllCommentsByArticleId, getArticleById } from "../../api";
-import { useEffect } from "react";
-import CommentList from "../Comments/CommentList";
+import { useApiRequest } from "../hooks/useApiRequest";
+import { getArticleById } from "../api";
+import CommentList from "./Articles.commentList";
 
 function Article({ sortedArticles, listData }) {
   const navigate = useNavigate();
@@ -69,6 +68,7 @@ function Article({ sortedArticles, listData }) {
         </ul>
         <ul>
           <li>{created_at}</li>
+          <li>{comment_count}</li>
           <li>
             <button>{votes}</button>
           </li>

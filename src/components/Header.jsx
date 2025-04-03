@@ -1,7 +1,6 @@
-import React from "react";
-import CategoryNavbar from "./Header/CategoryNavbar";
-import ThemeToggle from "./header/ThemeToggle";
-import UserProfile from "./Header/UserProfile";
+import CategoryNavbar from "./Header.categoryNavbar";
+import ThemeToggle from "./Header.themeToggle";
+import UserProfile from "./Header.userProfile";
 import { Link } from "react-router-dom";
 
 function Header() {
@@ -12,7 +11,9 @@ function Header() {
       </Link>
       <CategoryNavbar />
       <ThemeToggle />
-      <button>Log In</button>
+      <Link to={"/login"}>
+        <button>Log In</button>
+      </Link>
       <UserProfile />
     </>
   );

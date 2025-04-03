@@ -10,6 +10,12 @@ export const getAllTopics = () => {
   });
 };
 
+export const getAllUsers = () => {
+  return ncNews.get("/users").then(({ data }) => {
+    return data.users;
+  });
+};
+
 export const getSortedByArticles = (sort_by, page, limit) => {
   return ncNews
     .get("/articles", {

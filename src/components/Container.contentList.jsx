@@ -1,6 +1,5 @@
 import React from "react";
-
-import ListItem from "./ListItem";
+import ListItem from "./Articles.listItem";
 
 function ContentList({ listData, isLoading, listError }) {
   if (isLoading) return <div>Loading...</div>;

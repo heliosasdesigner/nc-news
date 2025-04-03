@@ -1,6 +1,6 @@
 import React from "react";
 
-function Comment({ comment_id, author, body, created_at, votes, total_count }) {
+function Comment({ author, body, created_at, votes }) {
   return (
     <>
       <div>

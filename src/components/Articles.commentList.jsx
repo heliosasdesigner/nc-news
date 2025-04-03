@@ -1,6 +1,6 @@
-import { getAllCommentsByArticleId } from "../../api";
-import { usePartialFetching } from "../../hooks/usePartialFetching";
-import Comment from "./Comment";
+import { getAllCommentsByArticleId } from "../api";
+import { usePartialFetching } from "../hooks/usePartialFetching";
+import Comment from "./Articles.comment";
 
 function CommentList({ id }) {
   const {
