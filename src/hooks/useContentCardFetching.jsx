@@ -10,44 +10,55 @@ export const useContentCardFetching = () => {
   const [isMounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isMounted) {
-      setIsPageLoading(true);
-    } else {
-      setIsButtonLoading(true);
-    }
-    setError(false);
+    let isCancelled = false;
 
-    getSortedByArticles("votes", currentPage, 4)
-      .then((articlesByVotes) => {
-        if ((articlesByVotes.length > 0) & (articlesByVotes[0].votes < 10)) {
-          return getSortedByArticles("comment_count", currentPage, 4);
+    const fetchArticles = async () => {
+      setError(null);
+      if (!isMounted) {
+        setIsPageLoading(true);
+      } else {
+        setIsButtonLoading(true);
+      }
+
+      try {
+        let articles = await getSortedByArticles("votes", currentPage, 3);
+
+        if (articles.length > 0 && articles[0].votes < 10) {
+          articles = await getSortedByArticles("comment_count", currentPage, 3);
         }
 
-        return articlesByVotes;
-      })
-      .then((articlesToAdd) => {
-        if (isMounted) {
-          setSortedArticles((prev) => [...prev, ...articlesToAdd]);
-        } else {
-          setSortedArticles(articlesToAdd);
+        if (!isCancelled) {
+          setSortedArticles((prev) =>
+            isMounted ? [...prev, ...articles] : articles
+          );
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (isMounted) setError(true);
-      })
-      .finally(() => {
-        if (!isMounted) {
-          setIsPageLoading(false);
-        } else {
-          setIsButtonLoading(false);
+      } catch (err) {
+        console.error(err);
+        if (!isCancelled) {
+          setError({
+            status: err?.status || 500,
+            message: err?.message || err,
+          });
         }
-        setMounted(true);
-      });
+      } finally {
+        if (!isCancelled) {
+          if (!isMounted) {
+            setIsPageLoading(false);
+          } else {
+            setIsButtonLoading(false);
+          }
+          setMounted(true);
+        }
+      }
+    };
+    fetchArticles();
+    return () => {
+      isCancelled = true;
+    };
   }, [currentPage]);
 
   function handleLoadMore() {
-    setCurrentPage((prevPage) => prevPage + 1);
+    setCurrentPage((prev) => prev + 1);
   }
 
   return {

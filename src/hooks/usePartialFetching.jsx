@@ -9,33 +9,46 @@ export const usePartialFetching = (apiFunction, ...args) => {
   const [isMounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isMounted) {
-      setIsPageLoading(true);
-    } else {
-      setIsButtonLoading(true);
-    }
-    setError(false);
-    const paramsArgs = [...args, currentPage];
-    apiFunction(...paramsArgs)
-      .then((dataToAdd) => {
-        if (isMounted) {
-          setData((prev) => [...prev, ...dataToAdd]);
-        } else {
-          setData(dataToAdd);
+    let isCancelled = false;
+
+    const fetchData = async () => {
+      setError(null);
+      // Determine page loading or button loading
+      if (!isMounted) {
+        setIsPageLoading(true);
+      } else {
+        setIsButtonLoading(true);
+      }
+      // Fetching Data
+      try {
+        const paramsArgs = [...args, currentPage];
+        let data = await apiFunction(...paramsArgs);
+        if (!isCancelled) {
+          setData((prev) => (isMounted ? [...prev, ...data] : data));
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        if (isMounted) setError(true);
-      })
-      .finally(() => {
-        if (!isMounted) {
-          setIsPageLoading(false);
-        } else {
-          setIsButtonLoading(false);
+      } catch (err) {
+        if (!isCancelled) {
+          setError({
+            status: err?.status || 500,
+            message: err?.message || err,
+          });
         }
-        setMounted(true);
-      });
+      } finally {
+        if (!isCancelled) {
+          if (!isMounted) {
+            setIsPageLoading(false);
+          } else {
+            setIsButtonLoading(false);
+          }
+          setMounted(true);
+        }
+      }
+    };
+    fetchData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [currentPage]);
 
   function handleLoadMore() {
