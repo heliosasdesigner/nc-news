@@ -64,8 +64,8 @@ function Article({ sortedArticles, listData }) {
       <div className="mb-4">
         <BackButton />
         <img className="w-[800px] my-3 rounded-sm" src={article_img_url} />
-        <h3 className="text-4xl font-thin">{title}</h3>
-        <div className="flex justify-between mb-2 text-xs text-gray-400 w-full min-w-[320px]">
+        <h3 className="text-4xl my-8 font-thin">{title}</h3>
+        <div className="flex justify-between mb-6 text-xs text-gray-400 w-full min-w-[320px]">
           <ul className="flex flex-col gap-0 my-4">
             <li className="uppercase font-bold">
               {topic} <span className="mx-4">|</span> by {author}
@@ -89,7 +89,7 @@ function Article({ sortedArticles, listData }) {
 
         <p>{body}</p>
       </div>
-      <div className="mb-6">
+      <div className="mb-12">
         <ArticleNavigation
           prevArticle={prevArticle}
           nextArticle={nextArticle}

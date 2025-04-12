@@ -37,6 +37,17 @@ export const getSortedByArticles = (sort_by, page, limit) => {
     });
 };
 
+export const postCommentByArticleId = (article_id, username, content) => {
+  return ncNews
+    .post(`/articles/${article_id}/comments`, {
+      username: username,
+      body: content,
+    })
+    .then(({ data }) => {
+      return data.comment;
+    });
+};
+
 export const patchArticlesVote = (article_id, votes) => {
   return ncNews
     .patch(`/articles/${article_id}`, { inc_votes: votes })
