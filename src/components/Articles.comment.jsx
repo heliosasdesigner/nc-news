@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { getUserByUsername } from "../api";
 import { formatVotes, timeAgo } from "../uilit";
 import VoteButton from "./Ui.voteButton";
+import { AuthContent } from "./AuthContext";
 
-function Comment({ comment_id, author, body, created_at, votes }) {
+function Comment({
+  comment_id,
+  author,
+  body,
+  created_at,
+  votes,
+  onDelete,
+  isAuthor,
+}) {
   const state = "comment";
   const {
     data: user,
     isLoading,
     error,
   } = useApiRequest(getUserByUsername, author);
-
   const [newVotes, setNewVotes] = useState(0);
 
   // reset the newVote to 0
@@ -44,7 +52,17 @@ function Comment({ comment_id, author, body, created_at, votes }) {
           </div>
           <div>
             <p className="font-semibold text-gray-200">{name}</p>
-            <time className="text-xs text-gray-400">{dayDifferent}</time>
+            <div className="flex flex-row text-xs text-gray-400 gap-3">
+              <time>{dayDifferent}</time>
+              {isAuthor ? (
+                <button
+                  onClick={onDelete}
+                  className="text-xs text-red-900 underline cursor-pointer"
+                >
+                  Delete Comment
+                </button>
+              ) : null}
+            </div>
           </div>
         </div>
         <div className="flex flex-row gap-5 ">
