@@ -8,7 +8,6 @@ function VoteButton({ id, state, initialVotes, newVotes, setNewVotes }) {
   const navigate = useNavigate();
   const location = useLocation();
   const handleVote = (delta, location) => {
-    console.log(location);
     if (!user) {
       navigate("/login", { state: { from: location } });
     } else {
