@@ -10,6 +10,7 @@ import Article from "./components/Articles.article";
 
 import { useContentCardFetching } from "./hooks/useContentCardFetching";
 import { useApiRequest } from "./hooks/useApiRequest";
+import { AuthProvider } from "./components/AuthContext";
 
 function App() {
   //Card
@@ -29,12 +30,12 @@ function App() {
   } = useApiRequest(getSortedByArticles, "created_at", 1, 12);
 
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route
           path="/"
           element={
-            <div className="container dark:text-3xl light:text-xl font-bold underline">
+            <div className=" w-screen  justify-center ">
               <Header />
               <Container
                 listData={listData}
@@ -48,15 +49,13 @@ function App() {
           <Route
             path="/"
             element={
-              <section>
-                <ContentCard
-                  sortedArticles={sortedArticles}
-                  isPageLoading={isPageLoading}
-                  isButtonLoading={isButtonLoading}
-                  error={cardError}
-                  handleLoadMore={handleLoadMore}
-                />
-              </section>
+              <ContentCard
+                sortedArticles={sortedArticles}
+                isPageLoading={isPageLoading}
+                isButtonLoading={isButtonLoading}
+                error={cardError}
+                handleLoadMore={handleLoadMore}
+              />
             }
           />
           <Route
@@ -70,7 +69,7 @@ function App() {
         </Route>
         <Route path="/login" element={<LogIn />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

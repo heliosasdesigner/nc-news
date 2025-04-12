@@ -1,8 +1,11 @@
+import { useContext } from "react";
 import { getAllCommentsByArticleId } from "../api";
 import { usePartialFetching } from "../hooks/usePartialFetching";
 import Comment from "./Articles.comment";
+import { AuthContent } from "./AuthContext";
 
 function CommentList({ id }) {
+  const { user } = useContext(AuthContent);
   const {
     data: comments,
     isPageLoading,
@@ -15,7 +18,26 @@ function CommentList({ id }) {
   if (error) return <div>Oops...</div>;
   return (
     <>
-      <h4>Comments:</h4>
+      <h4 className="text-sm font-thin underline my-4">Comments:</h4>
+      {!user ? null : (
+        <div>
+          <form>
+            <label htmlFor="postComment"></label>
+            <textarea
+              type="textarea"
+              id="postComment"
+              className="border border-gray-500 rounded-sm w-full my-2 resize-none overflow-hidden p-2 break-words"
+              placeholder="Leave your comment here"
+              onInput={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              rows={1}
+            />
+          </form>
+        </div>
+      )}
+
       {comments.map((comment) => {
         const { comment_id, author, body, created_at, votes, total_count } =
           comment;
@@ -33,13 +55,16 @@ function CommentList({ id }) {
         );
       })}
       {comments[0]?.total_count !== comments.length ? (
-        <button
-          onClick={() => {
-            handleLoadMore();
-          }}
-        >
-          {!isButtonLoading ? "Load More" : "Loading..."}
-        </button>
+        <div className="flex items-center justify-center">
+          <button
+            className="cursor-pointer"
+            onClick={() => {
+              handleLoadMore();
+            }}
+          >
+            {!isButtonLoading ? "Load More" : "Loading..."}
+          </button>
+        </div>
       ) : null}
     </>
   );

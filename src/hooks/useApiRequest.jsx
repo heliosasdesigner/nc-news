@@ -6,20 +6,33 @@ export const useApiRequest = (apiFunction, ...args) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setError(false);
-    setIsLoading(true);
+    let isCancelled = false;
 
-    apiFunction(...args)
-      .then((data) => {
-        setData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-        setError({ status: 404, message: err });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    const fetchData = async () => {
+      try {
+        setError(null);
+        setIsLoading(true);
+
+        const result = await apiFunction(...args);
+
+        if (!isCancelled) setData(result);
+      } catch (err) {
+        if (!isCancelled) {
+          console.error(err);
+          setError({
+            status: err?.status || 500,
+            message: err?.message || err,
+          });
+        }
+      } finally {
+        if (!isCancelled) setIsLoading(false);
+      }
+    };
+    fetchData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [...args]);
 
   return { data, isLoading, error };

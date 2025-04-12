@@ -16,6 +16,12 @@ export const getAllUsers = () => {
   });
 };
 
+export const getUserByUsername = (username) => {
+  return ncNews.get(`/users/${username}`).then(({ data }) => {
+    return data.user;
+  });
+};
+
 export const getSortedByArticles = (sort_by, page, limit) => {
   return ncNews
     .get("/articles", {
@@ -28,6 +34,22 @@ export const getSortedByArticles = (sort_by, page, limit) => {
     })
     .then(({ data }) => {
       return data.articles;
+    });
+};
+
+export const patchArticlesVote = (article_id, votes) => {
+  return ncNews
+    .patch(`/articles/${article_id}`, { inc_votes: votes })
+    .then(({ data }) => {
+      return data.article;
+    });
+};
+
+export const patchCommentVote = (comment_id, votes) => {
+  return ncNews
+    .patch(`/comments/${comment_id}`, { inc_votes: votes })
+    .then(({ data }) => {
+      return data.comment;
     });
 };
 

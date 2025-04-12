@@ -1,30 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { FiMoon, FiSun } from "react-icons/fi";
 
 function ThemeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
+  const [isLightMode, setIsLightMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
-      return savedTheme === "dark";
+      return savedTheme === "light";
     }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return window.matchMedia("(prefers-color-scheme: light)").matches;
   });
 
   useEffect(() => {
     const html = document.documentElement;
-    if (isDarkMode) {
-      html.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      html.classList.remove("dark");
+    if (isLightMode) {
+      html.classList.add("light");
       localStorage.setItem("theme", "light");
+    } else {
+      html.classList.remove("light");
+      localStorage.setItem("theme", "dark");
     }
-  }, [isDarkMode]);
+  }, [isLightMode]);
 
-  const toggleTheme = () => setIsDarkMode(!isDarkMode);
+  const toggleTheme = () => setIsLightMode(!isLightMode);
 
   return (
-    <button onClick={toggleTheme} className="p-2 bg-gray-200 dark:bg-gray-700">
-      Toggle Theme
+    <button
+      onClick={toggleTheme}
+      className="p-2 rounded-full transition duration-300 light:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 text-xl"
+    >
+      {isLightMode ? <FiMoon /> : <FiSun />}
     </button>
   );
 }
