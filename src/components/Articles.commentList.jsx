@@ -1,5 +1,9 @@
 import { useContext, useState } from "react";
-import { getAllCommentsByArticleId, postCommentByArticleId } from "../api";
+import {
+  deleteCommentByCommentId,
+  getAllCommentsByArticleId,
+  postCommentByArticleId,
+} from "../api";
 import { usePartialFetching } from "../hooks/usePartialFetching";
 import Comment from "./Articles.comment";
 import { AuthContent } from "./AuthContext";
@@ -13,11 +17,30 @@ function CommentList({ id }) {
   const { user } = useContext(AuthContent);
   const {
     data: comments,
+    setData: setComments,
     isPageLoading,
     isButtonLoading,
     error,
     handleLoadMore,
   } = usePartialFetching(getAllCommentsByArticleId, id);
+
+  function handleDeleteComment(comment_id) {
+    deleteCommentByCommentId(comment_id)
+      .then(() => {
+        setLocalComments((prev) =>
+          prev.filter((comment) => comment.comment_id !== comment_id)
+        );
+
+        if (setComments) {
+          setComments((prev) =>
+            prev.filter((comment) => comment.comment_id !== comment_id)
+          );
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to delete comment", err);
+      });
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -31,7 +54,7 @@ function CommentList({ id }) {
       })
       .catch((err) => {
         console.error("Failed to post comment:", err);
-        setPostError(err);
+        setPostError(err, postError);
       })
       .finally(() => {
         setIsPosting(false);
@@ -78,6 +101,8 @@ function CommentList({ id }) {
         return (
           <div key={comment_id}>
             <Comment
+              onDelete={() => handleDeleteComment(comment_id)}
+              isAuthor={user?.username === author}
               comment_id={comment_id}
               author={author}
               body={body}

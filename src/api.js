@@ -48,6 +48,13 @@ export const postCommentByArticleId = (article_id, username, content) => {
     });
 };
 
+export const deleteCommentByCommentId = (comment_id) => {
+  return ncNews.delete(`/comments/${comment_id}`).then(({ data }) => {
+    console.log(data);
+    return data;
+  });
+};
+
 export const patchArticlesVote = (article_id, votes) => {
   return ncNews
     .patch(`/articles/${article_id}`, { inc_votes: votes })

@@ -57,6 +57,7 @@ export const usePartialFetching = (apiFunction, ...args) => {
 
   return {
     data,
+    setData,
     isPageLoading,
     isButtonLoading,
     error,
