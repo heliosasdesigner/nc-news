@@ -21,11 +21,19 @@ function HeroCard({ article }) {
       onClick={() =>
         navigate(`/articles/${article_id}`, { state: { source: "card" } })
       }
-      className="cursor-pointer max-w-[1000px] w-[1000px] "
+      className="cursor-pointer w-full"
     >
-      <img className="rounded-sm w-full" src={article_img_url} alt={title} />
-      <h1 className="text-6xl font-extralight mt-8">{title}</h1>
-      <div className="flex justify-between text-xs text-gray-200 w-full mt-3">
+      <img
+        className="rounded-md w-full h-auto object-cover max-h-[500px] md:max-h-[600px] lg:max-h-[800px]"
+        src={article_img_url}
+        alt={title}
+      />
+
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-light mt-4 md:mt-6 leading-snug md:leading-tight">
+        {title}
+      </h1>
+
+      <div className="flex justify-between text-xs text-gray-400 w-full mt-3 flex-wrap gap-y-1">
         <ul className="flex flex-row gap-4">
           <li className="uppercase font-bold">{topic}</li>
           <li>{heroDateDifferent}</li>

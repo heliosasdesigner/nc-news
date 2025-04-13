@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useApiRequest } from "../hooks/useApiRequest";
 import { getUserByUsername } from "../api";
 import { formatVotes, timeAgo } from "../uilit";
 import VoteButton from "./Ui.voteButton";
-import { AuthContent } from "./AuthContext";
 
 function Comment({
   comment_id,

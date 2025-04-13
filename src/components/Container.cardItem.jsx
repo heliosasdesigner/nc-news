@@ -14,23 +14,30 @@ function CardItem({
 
   return (
     <div
-      className="cursor-pointer"
+      className="cursor-pointer flex flex-col h-full "
       onClick={() =>
         navigate(`/articles/${article_id}`, { state: { source: "card" } })
       }
     >
-      <div className="flex justify-between text-xs text-gray-400 w-full min-w-[320px] cursor-pointer">
-        <ul className="flex flex-col gap-0">
-          <li className="uppercase font-bold">{topic}</li>
+      <div className="flex justify-between text-xs text-gray-400 ">
+        <ul className="flex flex-col gap-[2px]">
+          <li className="uppercase font-semibold tracking-wide">{topic}</li>
           <li>{created_at}</li>
         </ul>
-        <ul className="flex flex-row gap-4">
+        <ul className="flex flex-row gap-3 items-start">
           <li>{comment_count}</li>
           <li>{votes}</li>
         </ul>
       </div>
-      <div className="my-1.5 text-lg">{title}</div>
-      <img className="rounded-sm" src={article_img_url} alt={title} />
+
+      <h3 className="text-lg font-medium leading-snug mg:min-h-[5.5rem] lg:min-h-[3.5rem] h-auto my-4 line-clamp-2 text-ellipsis overflow-hidden">
+        {title}
+      </h3>
+      <img
+        className="rounded-md w-full h-auto object-cover aspect-video "
+        src={article_img_url}
+        alt={title}
+      />
     </div>
   );
 }

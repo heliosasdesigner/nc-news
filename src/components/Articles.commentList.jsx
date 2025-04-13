@@ -14,7 +14,9 @@ function CommentList({ id }) {
   const [localComments, setLocalComments] = useState([]);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(null);
+
   const { user } = useContext(AuthContent);
+
   const {
     data: comments,
     setData: setComments,
@@ -24,7 +26,7 @@ function CommentList({ id }) {
     handleLoadMore,
   } = usePartialFetching(getAllCommentsByArticleId, id);
 
-  function handleDeleteComment(comment_id) {
+  const handleDeleteComment = (comment_id) => {
     deleteCommentByCommentId(comment_id)
       .then(() => {
         setLocalComments((prev) =>
@@ -40,9 +42,9 @@ function CommentList({ id }) {
       .catch((err) => {
         console.error("Failed to delete comment", err);
       });
-  }
+  };
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsPosting(true);
     setPostError(null);
@@ -59,10 +61,22 @@ function CommentList({ id }) {
       .finally(() => {
         setIsPosting(false);
       });
-  }
+  };
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleAutoResize = (e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  };
 
   if (isPageLoading) return <div>Loading...</div>;
   if (error) return <div>Oops...</div>;
+
+  const allComments = [...localComments, ...comments];
+  const hasMoreComments = comments[0]?.total_count !== comments.length;
+
   return (
     <>
       <h4 className="text-sm font-thin underline my-6">Comments:</h4>
@@ -73,18 +87,12 @@ function CommentList({ id }) {
             onSubmit={handleSubmit}
           >
             <textarea
-              type="textarea"
               id="postComment"
               className="border border-gray-500 rounded-sm w-full my-2 resize-none overflow-hidden p-2 break-words"
               placeholder="Leave your comment here"
               value={comment}
-              onChange={(e) => {
-                setComment(e.target.value);
-              }}
-              onInput={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
+              onChange={handleCommentChange}
+              onInput={handleAutoResize}
               rows={1}
             />
             <Button
@@ -95,7 +103,7 @@ function CommentList({ id }) {
         </>
       )}
 
-      {[...localComments, ...comments].map((comment) => {
+      {allComments.map((comment) => {
         const { comment_id, author, body, created_at, votes, total_count } =
           comment;
         return (
@@ -113,7 +121,7 @@ function CommentList({ id }) {
           </div>
         );
       })}
-      {comments[0]?.total_count !== comments.length ? (
+      {hasMoreComments && (
         <div className="flex items-center justify-center">
           <button
             className="cursor-pointer"
@@ -124,7 +132,7 @@ function CommentList({ id }) {
             {!isButtonLoading ? "Load More" : "Loading..."}
           </button>
         </div>
-      ) : null}
+      )}
     </>
   );
 }

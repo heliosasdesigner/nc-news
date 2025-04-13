@@ -9,25 +9,32 @@ import ContentCard from "./components/Container.contentCard";
 import Article from "./components/Articles.article";
 
 import { useContentCardFetching } from "./hooks/useContentCardFetching";
-import { useApiRequest } from "./hooks/useApiRequest";
 import { AuthProvider } from "./components/AuthContext";
+import { useState } from "react";
 
 function App() {
+  const [topic, setTopic] = useState("All");
   //Card
   const {
-    sortedArticles,
+    data: sortedArticles,
     isPageLoading,
     isButtonLoading,
     error: cardError,
     handleLoadMore,
-  } = useContentCardFetching();
+  } = useContentCardFetching(getSortedByArticles, {
+    sortBy: "votes",
+    limit: 12,
+  });
 
   // List
   const {
     data: listData,
     isLoading: isListLoading,
     error: listError,
-  } = useApiRequest(getSortedByArticles, "created_at", 1, 12);
+  } = useContentCardFetching(getSortedByArticles, {
+    sortBy: "created_at",
+    limit: 12,
+  });
 
   return (
     <AuthProvider>
@@ -36,7 +43,7 @@ function App() {
           path="/"
           element={
             <div className=" w-screen  justify-center ">
-              <Header />
+              <Header topic={topic} setTopic={setTopic} />
               <Container
                 listData={listData}
                 isListLoading={isListLoading}
@@ -58,6 +65,21 @@ function App() {
               />
             }
           />
+
+          <Route
+            path="/:topic"
+            element={
+              <ContentCard
+                topic={topic}
+                sortedArticles={sortedArticles}
+                isPageLoading={isPageLoading}
+                isButtonLoading={isButtonLoading}
+                error={cardError}
+                handleLoadMore={handleLoadMore}
+              />
+            }
+          />
+
           <Route
             path="/articles/:id"
             element={
