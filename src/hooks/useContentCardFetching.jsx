@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { getSortedByArticles } from "../api";
 
-export const useContentCardFetching = () => {
-  const [sortedArticles, setSortedArticles] = useState([]);
+export const useContentCardFetching = (apiFunction, options = {}) => {
+  const { sortBy, limit } = options;
+
+  const [data, setData] = useState([]);
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,16 +22,20 @@ export const useContentCardFetching = () => {
       }
 
       try {
-        let articles = await getSortedByArticles("votes", currentPage, 3);
-
-        if (articles.length > 0 && articles[0].votes < 10) {
-          articles = await getSortedByArticles("comment_count", currentPage, 3);
-        }
+        let articles = await apiFunction(sortBy, currentPage, limit);
 
         if (!isCancelled) {
-          setSortedArticles((prev) =>
-            isMounted ? [...prev, ...articles] : articles
-          );
+          setData((prev) => {
+            const filteredNewArticles = articles.filter(
+              (article) =>
+                !prev.some(
+                  (prevArticle) => prevArticle.article_id === article.article_id
+                )
+            );
+            return isMounted
+              ? [...prev, ...filteredNewArticles]
+              : filteredNewArticles;
+          });
         }
       } catch (err) {
         console.error(err);
@@ -55,14 +60,14 @@ export const useContentCardFetching = () => {
     return () => {
       isCancelled = true;
     };
-  }, [currentPage]);
+  }, [currentPage, sortBy, limit, isMounted]);
 
   function handleLoadMore() {
     setCurrentPage((prev) => prev + 1);
   }
 
   return {
-    sortedArticles,
+    data,
     isPageLoading,
     isButtonLoading,
     error,

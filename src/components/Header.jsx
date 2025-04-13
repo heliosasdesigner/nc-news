@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { AuthContent } from "./AuthContext";
 import Button from "./Ui.button";
 
-function Header() {
+function Header({ topic, setTopic }) {
   const { user } = useContext(AuthContent);
 
   return (
@@ -16,7 +16,7 @@ function Header() {
         <Logo />
       </Link>
       <nav className="flex gap-6 mx-auto ">
-        <CategoryNavbar />
+        <CategoryNavbar currentTopic={topic} setTopic={setTopic} />
       </nav>
       <div className=" flex flex-row ">
         <ThemeToggle />
